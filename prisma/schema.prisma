@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Album{
+  id                  String    @id @default(uuid())
+  spotify_album_id    String    @unique
+  album_name          String
+  release_date        String 
+  spotify_link        String
+  song                Song[]
+}
+
+model Song{
+  id                 String   @id @default(uuid())
+  spotify_song_id    String   @unique
+  song_name          String
+  track_number       Int
+  spotify_link       String
+  played             Boolean  @default(false)
+  played_at          String?
+  played_when        String?
+  on_set_list        Boolean  @default(false)
+  album              Album    @relation(fields: [albumId], references: [spotify_album_id])
+  albumId            String
+  facts              Fact[]      
+}
+
+model Fact{
+  id      String @id @default(uuid())
+  fact    String
+  song    Song @relation(fields: [songId], references: [id])
+  songId  String
+}
+
+model Single{
+  id                  String  @id @default(uuid())
+  spotify_single_id   String  @unique
+  single_name         String
+  spotify_link        String
+  played              Boolean @default(false)
+  played_at           String?
+  played_when         String?
+  on_set_list         Boolean @default(false)
+  album               String  @default("single")
+}
