@@ -56,7 +56,6 @@ export default class SongController {
           data: {
             spotify_song_id: trackInfo.id,
             song_name: trackInfo.name,
-            track_number: trackInfo.track_number,
             spotify_link: trackInfo.external_urls.spotify,
             albumId: albumId
           }
@@ -73,6 +72,19 @@ export default class SongController {
           console.error("Error:", error);
         }
       }
+    }
+  }
+
+  static async getSongsAndSingles(req: Request, res: Response) {
+    try {
+      const songsAndSingles =
+        await prisma.$queryRaw`SELECT * FROM song UNION SELECT * FROM single ORDER BY albumId;`;
+
+      return res.json(songsAndSingles);
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }

@@ -6,9 +6,11 @@ import SingleController from "../controllers/SingleController";
 
 const router = express.Router();
 
-router.get("/token", SpotifyController.getAccessToken);
-router.get("/spotify/albums/:artistId", AlbumController.fetchAndStoreAlbum);
-router.get("/spotify/songs/:albumId", SongController.fetchAndStoreAlbumTracks);
-router.get("/spotify/singles/:artistId", SingleController.fetchAndStoreSingle);
+router
+  .get("/token", SpotifyController.getAccessToken)
+  .get("/spotify/albums/:artistId", AlbumController.fetchAndStoreAlbum)
+  .get("/spotify/songs/:albumId", SongController.fetchAndStoreAlbumTracks)
+  .get("/songs", SongController.getSongsAndSingles)
+  .get("/spotify/singles/:artistId", SingleController.fetchAndStoreSingle);
 
 export default router;

@@ -24,7 +24,6 @@ model Song{
   id                 String   @id @default(uuid())
   spotify_song_id    String   @unique
   song_name          String
-  track_number       Int
   spotify_link       String
   played             Boolean  @default(false)
   played_at          String?
