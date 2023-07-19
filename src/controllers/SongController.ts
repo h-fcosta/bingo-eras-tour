@@ -22,11 +22,14 @@ export default class SongController {
     try {
       const accessToken = await redisClient.get("accessToken");
 
-      const response = await api.get(`/albums/${albumId}/tracks?market=BR`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+      const response = await api.get(
+        `/albums/${albumId}/tracks?market=BR&limit=50`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
         }
-      });
+      );
 
       return response.data;
     } catch (error) {

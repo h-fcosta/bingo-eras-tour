@@ -14,7 +14,7 @@ model Album{
   id                  String    @id @default(uuid())
   spotify_album_id    String    @unique
   album_name          String
-  release_date        String 
+  release_date        DateTime 
   spotify_link        String
   song                Song[]
   singles             Single[]
@@ -28,7 +28,7 @@ model Song{
   spotify_link       String
   played             Boolean  @default(false)
   played_at          String?
-  played_when        String?
+  played_when        DateTime?
   on_set_list        Boolean  @default(false)
   album              Album    @relation(fields: [albumId], references: [spotify_album_id])
   albumId            String
@@ -49,8 +49,8 @@ model Single{
   spotify_link        String
   played              Boolean @default(false)
   played_at           String?
-  played_when         String?
+  played_when         DateTime?
   on_set_list         Boolean @default(false)
   album               Album?  @relation(fields: [albumId], references: [spotify_album_id])
-  albumId             String?
+  albumId             String
 }
