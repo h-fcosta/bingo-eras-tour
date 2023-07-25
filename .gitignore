@@ -5,3 +5,4 @@ dist
 migrations
 Dockerfile
 docker-compose.yml
+.dockerignore
