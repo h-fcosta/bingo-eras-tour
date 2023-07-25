@@ -1,6 +1,9 @@
 import { createClient } from "redis";
+import dotEnv from "dotenv";
 
-const redisClient = createClient();
+const redisClient = createClient({
+  url: process.env.REDIS_URL
+});
 
 redisClient.on("connect", () => {
   console.log("Connected on Redis");
