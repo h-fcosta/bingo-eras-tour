@@ -5,8 +5,10 @@
   "main": "app.ts",
   "type": "module",
   "scripts": {
-    "start": "nodemon",
-    "start:docker": "npm run build && npm run start",
+    "build": "rimraf dist && tsc",
+    "dev": "nodemon -L",
+    "start": "ts-node app.ts",
+    "start:docker": "npm run build && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
