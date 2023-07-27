@@ -1,15 +1,17 @@
 import express from "express";
 import dotEnv from "dotenv";
 import routes from "./src/routes";
+// import cors from "cors";
 import prisma from "./src/db/dbConnect";
 
 dotEnv.config();
 
 const app = express();
 const port = process.env.PORT;
+const host = "0.0.0.0";
 
 app.use(express.json());
-
+// app.use(cors());
 routes(app);
 
 app.listen(port, () => {

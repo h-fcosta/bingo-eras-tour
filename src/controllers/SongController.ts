@@ -77,10 +77,37 @@ export default class SongController {
 
   static async getSongsAndSingles(req: Request, res: Response) {
     try {
-      const songsAndSingles =
-        await prisma.$queryRaw`SELECT * FROM song UNION SELECT * FROM single ORDER BY albumId;`;
+      const songs = await prisma.song.findMany({
+        include: {
+          album: true
+        },
+        orderBy: {
+          album: {
+            release_order: "asc"
+          }
+        }
+      });
+
+      const singles = await prisma.single.findMany({
+        include: {
+          album: true
+        },
+        orderBy: {
+          album: {
+            release_order: "asc"
+          }
+        }
+      });
+
+      const songsAndSingles = [...songs, ...singles].sort(
+        (a, b) => (a.album?.release_order || 0) - (b.album?.release_order || 0)
+      );
 
       return res.json(songsAndSingles);
+      // const songsAndSingles =
+      //   await prisma.$queryRaw`SELECT * FROM song UNION SELECT * FROM single ORDER BY albumId;`;
+
+      // return res.json(songsAndSingles);
     } catch (error) {
       console.error(error);
 
