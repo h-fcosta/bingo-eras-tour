@@ -79,7 +79,12 @@ export default class SongController {
     try {
       const songs = await prisma.song.findMany({
         include: {
-          album: true
+          album: {
+            select: {
+              release_order: true,
+              album_color: true
+            }
+          }
         },
         orderBy: {
           album: {
@@ -90,7 +95,12 @@ export default class SongController {
 
       const singles = await prisma.single.findMany({
         include: {
-          album: true
+          album: {
+            select: {
+              release_order: true,
+              album_color: true
+            }
+          }
         },
         orderBy: {
           album: {
