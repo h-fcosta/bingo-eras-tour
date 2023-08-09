@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "dev": "nodemon -L",
-    "start": "ts-node app.ts",
+    "start": "node app.js",
     "start:docker": "npm run build && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
