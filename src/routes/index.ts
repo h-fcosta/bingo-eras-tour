@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import spotify from "./spotifyRoutes";
 
-const routes = (app) => {
+const routes = (app: express.Application) => {
   app.route("/").get((req: Request, res: Response) => {
     res
       .status(200)

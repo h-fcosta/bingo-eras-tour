@@ -16,7 +16,7 @@ model Album{
   album_name          String
   release_date        String 
   spotify_link        String
-  release_order       Int?
+  release_order       String?
   album_color         String?
   song                Song[]
   singles             Single[]

@@ -37,7 +37,9 @@ export default class SongController {
       });
 
       const songsAndSingles = [...songs, ...singles].sort(
-        (a, b) => (a.album?.release_order || 0) - (b.album?.release_order || 0)
+        (a, b) =>
+          Number(a.album?.release_order || 0) -
+          Number(b.album?.release_order || 0)
       );
 
       return res.json(songsAndSingles);
