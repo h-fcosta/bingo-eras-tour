@@ -73,15 +73,9 @@ Limit: 30 albuns per artist
 
 `GET /songs`: Get a list of all songs and singles in the database.
 
-### Contributing
+### Contact
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix: git checkout -b feature-name
-3. Commit your changes: git commit -am 'Add some feature'
-4. Push to the branch: git push origin feature-name
-5. Submit a pull request.
+For any questions and suggestions, feel free to contact me at [henriquefcosta19@gmail.com]
 
 ### License
 
