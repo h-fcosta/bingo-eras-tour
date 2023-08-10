@@ -1,8 +1,8 @@
 import express from "express";
 import dotEnv from "dotenv";
-import routes from "./src/routes";
+import routes from "./routes";
 // import cors from "cors";
-import prisma from "./src/db/dbConnect";
+import prisma from "./db/dbConnect";
 
 dotEnv.config();
 
