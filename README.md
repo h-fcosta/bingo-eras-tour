@@ -7,6 +7,7 @@ This is the backend part of the The Eras Tour Surprise Song Bingo project, respo
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Tech Used](#tech-used)
 - [Usage](#usage)
 - [Endpoints](#endpoints)
 - [Contributing](#contributing)
@@ -55,6 +56,15 @@ npx prisma migrate dev
 ```bash
 npm start
 ```
+
+## Tech Used
+
+- Node.js
+- TypeScript
+- Axios
+- Express
+- Prisma
+- MySQL
 
 ### Usage
 
