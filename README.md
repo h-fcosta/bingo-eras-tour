@@ -57,7 +57,7 @@ npx prisma migrate dev
 npm start
 ```
 
-## Tech Used
+### Tech Used
 
 - Node.js
 - TypeScript
