@@ -38,8 +38,10 @@ npm install
 3. Configure the enviroment variables:
 
 ```plaintext
-DATABASE_URL=mysql://username:password@localhost:3306/bingo_eras_tour
-REDIS_URL=redis://localhost:6379
+SPOTIFY_API_ID
+SPOTIFY_CLIENT_SECRET
+DATABASE_URL
+REDIS_URL
 ```
 
 4. Run the database migrations:
@@ -58,7 +60,7 @@ npm start
 
 The backend uses the Spotify API to get a list of albums, singles and album tracks, and store in the database.
 
-Recommended to use a SQL database, the SongController creates relation between Album and Album Tracks.
+Recommended to use a SQL database, the SongController creates relation between Album and Album Tracks. Redis used to store the access token while fetching the data from the Spotify API.
 
 ### Endpoints
 
