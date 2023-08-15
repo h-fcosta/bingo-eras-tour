@@ -54,7 +54,7 @@ export default class SingleController {
         });
 
         console.log("Single stored", single);
-      } catch (error) {
+      } catch (error: any) {
         if (
           error.code === "P2002" &&
           error.meta.target.includes("spotify_single_id")

@@ -58,7 +58,7 @@ export default class AlbumController {
         });
 
         console.log("Album stored", album);
-      } catch (error) {
+      } catch (error: any) {
         if (
           error.code === "P2002" &&
           error.meta.target.includes("spotify_album_id")

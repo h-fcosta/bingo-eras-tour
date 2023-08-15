@@ -62,7 +62,7 @@ export default class SongController {
         });
 
         console.log("Track stored:", track);
-      } catch (error) {
+      } catch (error: any) {
         if (
           error.code === "P2002" &&
           error.meta.target.includes("spotify_album_id")
@@ -110,7 +110,9 @@ export default class SongController {
       });
 
       const songsAndSingles = [...songs, ...singles].sort(
-        (a, b) => (a.album?.release_order || 0) - (b.album?.release_order || 0)
+        (a, b) =>
+          Number(a.album?.release_order || 0) -
+          Number(b.album?.release_order || 0)
       );
 
       return res.json(songsAndSingles);
