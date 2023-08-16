@@ -50,6 +50,18 @@ CREATE TABLE "Single" (
     CONSTRAINT "Single_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Albuns_Links" (
+    "id" TEXT NOT NULL,
+    "spotify_album_id" TEXT,
+    "spotify_link" TEXT,
+    "deezer_album_id" TEXT,
+    "deezer_link" TEXT,
+    "albumId" TEXT,
+
+    CONSTRAINT "Albuns_Links_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Album_spotify_album_id_key" ON "Album"("spotify_album_id");
 
@@ -59,11 +71,20 @@ CREATE UNIQUE INDEX "Song_spotify_song_id_key" ON "Song"("spotify_song_id");
 -- CreateIndex
 CREATE UNIQUE INDEX "Single_spotify_single_id_key" ON "Single"("spotify_single_id");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Albuns_Links_spotify_album_id_key" ON "Albuns_Links"("spotify_album_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Albuns_Links_deezer_album_id_key" ON "Albuns_Links"("deezer_album_id");
+
 -- AddForeignKey
-ALTER TABLE "Song" ADD CONSTRAINT "Song_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("spotify_album_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Song" ADD CONSTRAINT "Song_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Fact" ADD CONSTRAINT "Fact_songId_fkey" FOREIGN KEY ("songId") REFERENCES "Song"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Single" ADD CONSTRAINT "Single_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("spotify_album_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Single" ADD CONSTRAINT "Single_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Albuns_Links" ADD CONSTRAINT "Albuns_Links_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE SET NULL ON UPDATE CASCADE;

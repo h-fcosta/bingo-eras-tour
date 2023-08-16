@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import redisClient from "../db/redis";
-import api from "../api";
+import { apiSpotify } from "../api";
 import prisma from "../db/dbConnect";
 
 export default class SongController {
@@ -22,7 +22,7 @@ export default class SongController {
     try {
       const accessToken = await redisClient.get("accessToken");
 
-      const response = await api.get(
+      const response = await apiSpotify.get(
         `/albums/${albumId}/tracks?market=BR&limit=50`,
         {
           headers: {
@@ -116,10 +116,6 @@ export default class SongController {
       );
 
       return res.json(songsAndSingles);
-      // const songsAndSingles =
-      //   await prisma.$queryRaw`SELECT * FROM song UNION SELECT * FROM single ORDER BY albumId;`;
-
-      // return res.json(songsAndSingles);
     } catch (error) {
       console.error(error);
 

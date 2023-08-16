@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import redisClient from "../db/redis";
-import api from "../api";
+import { apiSpotify } from "../api";
 import prisma from "../db/dbConnect";
 
 export default class SingleController {
@@ -22,7 +22,7 @@ export default class SingleController {
     try {
       const accessToken = await redisClient.get("accessToken");
 
-      const response = await api.get(
+      const response = await apiSpotify.get(
         `/artists/${artistId}/albums?market=BR&include_groups=single&limit=50`,
         {
           headers: {

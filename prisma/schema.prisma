@@ -12,14 +12,13 @@ datasource db {
 
 model Album{
   id                  String    @id @default(uuid())
-  spotify_album_id    String    @unique
   album_name          String
   release_date        String 
-  spotify_link        String
   release_order       String?
   album_color         String?
   song                Song[]
   singles             Single[]
+  albuns_links        Albuns_Links[]
 }
 
 model Song{
@@ -31,7 +30,7 @@ model Song{
   played_at          String?
   played_when        DateTime?
   on_set_list        Boolean  @default(false)
-  album              Album    @relation(fields: [albumId], references: [spotify_album_id])
+  album              Album    @relation(fields: [albumId], references: [id])
   albumId            String
   facts              Fact[]      
 }
@@ -52,6 +51,16 @@ model Single{
   played_at           String?
   played_when         DateTime?
   on_set_list         Boolean @default(false)
-  album               Album?  @relation(fields: [albumId], references: [spotify_album_id])
+  album               Album?  @relation(fields: [albumId], references: [id])
   albumId             String? @map(name: "albumId")
+}
+
+model Albuns_Links{
+  id                String @id @default(uuid())
+  spotify_album_id  String? @unique
+  spotify_link      String?
+  deezer_album_id   String? @unique
+  deezer_link       String?
+  album             Album? @relation(fields: [albumId], references: [id])
+  albumId           String?
 }

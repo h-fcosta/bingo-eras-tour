@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import redisClient from "../db/redis";
-import api from "../api";
+import { apiDeezer, apiSpotify } from "../api";
 import prisma from "../db/dbConnect";
 
 export default class AlbumController {
@@ -19,12 +19,26 @@ export default class AlbumController {
     }
   }
 
+  static async fetchAndStoreAlbumDeezer(req: Request, res: Response) {
+    const artistId = req.params.artistId;
+
+    try {
+      const albums = await AlbumController.fetchAlbumsFromDeezer(artistId);
+      await AlbumController.storeAlbumsInfoInDatabase(albums.data);
+
+      return res.json(albums.data);
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   //Fetching the artist's albums in the API
   static async fetchAlbumsFromSpotify(artistId: string) {
     try {
       const accessToken = await redisClient.get("accessToken");
 
-      const response = await api.get(
+      const response = await apiSpotify.get(
         `/artists/${artistId}/albums?market=BR&include_groups=album&limit=30`,
         {
           headers: {
@@ -36,6 +50,16 @@ export default class AlbumController {
       return response.data;
     } catch (error) {
       console.error("Erro: ", error);
+    }
+  }
+
+  static async fetchAlbumsFromDeezer(artistId: string) {
+    try {
+      const response = await apiDeezer.get(`/artist/${artistId}/albums`);
+
+      return response.data;
+    } catch (error: any) {
+      console.log("Error: erro");
     }
   }
 
@@ -68,6 +92,33 @@ export default class AlbumController {
           console.error("Error:", error);
         }
       }
+    }
+  }
+
+  static async storeAlbumsInfoInDatabase(albums: any[]): Promise<void> {
+    for (const albumApi of albums) {
+      try {
+        const { id, title, link } = albumApi;
+
+        const verifyAlbumDB = await prisma.album.findFirst({
+          where: { album_name: title }
+        });
+
+        if (verifyAlbumDB) {
+          try {
+            const albumInfoDeezer = await prisma.albuns_Links.create({
+              data: {
+                deezer_album_id: JSON.stringify(id),
+                deezer_link: link,
+                albumId: verifyAlbumDB.id
+              }
+            });
+            console.log("Deezer info stored:", albumInfoDeezer);
+          } catch (error: any) {
+            console.error(error);
+          }
+        }
+      } catch (error: any) {}
     }
   }
 }

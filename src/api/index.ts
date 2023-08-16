@@ -3,12 +3,18 @@ import dotEnv from "dotenv";
 
 dotEnv.config();
 
-const api = axios.create({
-  baseURL: process.env.API_URL,
+export const apiSpotify = axios.create({
+  baseURL: process.env.SPOTIFY_API_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json"
   }
 });
 
-export default api;
+export const apiDeezer = axios.create({
+  baseURL: process.env.DEEZER_API_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json"
+  }
+});
