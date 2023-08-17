@@ -16,72 +16,15 @@ model Album{
   release_date        String 
   release_order       String?
   album_color         String?
-  song                Song[]
-  singles             Single[]
-  albuns_links        Albuns_Links[]
+  albuns_links        Albuns_Links?
 }
 
 model Albuns_Links{
-  id                String @id @default(uuid())
-  spotify_album_id  String? @unique
+  id                String  @id @default(uuid())
+  spotify_album_id  String? 
   spotify_link      String?
-  deezer_album_id   String? @unique
+  deezer_album_id   String? 
   deezer_link       String?
-  album             Album? @relation(fields: [albumId], references: [id])
-  albumId           String?
-}
-
-model Song{
-  id                 String   @id @default(uuid())
-  song_name          String
-  played             Boolean  @default(false)
-  played_at          String?
-  played_when        DateTime?
-  on_set_list        Boolean  @default(false)
-  album              Album    @relation(fields: [albumId], references: [id])
-  albumId            String
-  facts              Fact[]
-  songs_links        Songs_Links[]
-}
-
-model Songs_Links{
-  id                String @id @default(uuid())
-  spotify_song_id   String? @unique
-  spotify_link      String?
-  deezer_song_id    String? @unique
-  deezer_link       String?
-  Song              Song? @relation(fields: [songId], references: [id])
-  songId            String?
-}
-
-model Single{
-  id                  String  @id @default(uuid())
-  single_name         String
-  played              Boolean @default(false)
-  played_at           String?
-  played_when         DateTime?
-  on_set_list         Boolean @default(false)
-  album               Album?  @relation(fields: [albumId], references: [id])
-  albumId             String? @map(name: "albumId")
-  facts               Fact[]
-  singles_links       Singles_Links[] 
-}
-
-model Singles_Links{
-  id                String @id @default(uuid())
-  spotify_single_id  String? @unique
-  spotify_link      String?
-  deezer_single_id   String? @unique
-  deezer_link       String?
-  Single            Single? @relation(fields: [singleId], references: [id])
-  singleId          String?
-}
-
-model Fact{
-  id        String @id @default(uuid())
-  fact      String
-  song      Song? @relation(fields: [songId], references: [id])
-  songId    String?
-  single    Single? @relation(fields: [singleId], references: [id])
-  singleId  String?
+  albumId           String  @unique
+  album             Album?   @relation(fields: [albumId], references: [id])
 }

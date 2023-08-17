@@ -56,7 +56,7 @@ export default class AlbumController {
   static async fetchAlbumsFromDeezer(artistId: string) {
     try {
       const response = await apiDeezer.get(
-        `/artist/${artistId}/albums?index=25`
+        `/artist/${artistId}/albums?index=0&limit=110`
       );
 
       return response.data;
@@ -76,18 +76,22 @@ export default class AlbumController {
       try {
         const album = await prisma.album.create({
           data: {
-            spotify_album_id: albumInfo.id,
             album_name: albumInfo.name,
-            spotify_link: albumInfo.external_urls.spotify,
-            release_date: albumInfo.release_date
+            release_date: albumInfo.release_date,
+            albuns_links: {
+              create: {
+                spotify_album_id: albumInfo.id,
+                spotify_link: albumInfo.external_urls.spotify
+              }
+            }
           }
         });
 
-        console.log("Album stored", album);
+        console.log("Album Stored:", album);
       } catch (error: any) {
         if (
           error.code === "P2002" &&
-          error.meta.target.includes("spotify_album_id")
+          error.meta.target.includes("album_name")
         ) {
           console.log("Duplicate album ignored:", albumInfo.name);
         } else {
@@ -98,28 +102,26 @@ export default class AlbumController {
   }
 
   static async storeAlbumsInfoInDatabase(albums: any[]): Promise<void> {
-    for (const albumApi of albums) {
+    for (const albumInfo of albums) {
       try {
-        const { id, title, link } = albumApi;
-
-        const verifyAlbumDB = await prisma.album.findFirst({
-          where: { album_name: title }
+        const existingAlbum = await prisma.album.findFirst({
+          where: { album_name: albumInfo.title }
         });
 
-        if (verifyAlbumDB) {
-          try {
-            const albumInfoDeezer = await prisma.albuns_Links.create({
-              data: {
-                deezer_album_id: JSON.stringify(id),
-                deezer_link: link,
-                albumId: verifyAlbumDB.id
-              }
-            });
+        if (existingAlbum) {
+          const albumInfoDeezer = await prisma.albuns_Links.update({
+            where: { albumId: existingAlbum.id },
+            data: {
+              deezer_album_id: albumInfo.id.toString(),
+              deezer_link: albumInfo.link
+            }
+          });
 
-            console.log("Deezer info stored:", albumInfoDeezer);
-          } catch (error: any) {
-            console.error("Error:", error);
-          }
+          console.log("Deezer info stored:", albumInfoDeezer);
+        } else {
+          console.log(
+            `Album named ${albumInfo.title} does not exist in database`
+          );
         }
       } catch (error: any) {
         console.error("Error", error);
