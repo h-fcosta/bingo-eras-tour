@@ -33,9 +33,7 @@ model Albuns_Links{
 
 model Song{
   id                 String   @id @default(uuid())
-  spotify_song_id    String   @unique
   song_name          String
-  spotify_link       String
   played             Boolean  @default(false)
   played_at          String?
   played_when        DateTime?
