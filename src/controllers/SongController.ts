@@ -119,6 +119,7 @@ export default class SongController {
       try {
         const { id, title, link } = tracksInfo;
 
+        //Erases "(Taylor's Version)" from the song name coming from the API
         const cleanedTitle = cleanTitle(title, /\(Taylor's Version\)/g);
 
         const verifyTrackDB = await prisma.song.findFirst({
