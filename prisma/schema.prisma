@@ -56,9 +56,7 @@ model Songs_Links{
 
 model Single{
   id                  String  @id @default(uuid())
-  spotify_single_id   String  @unique
   single_name         String
-  spotify_link        String
   played              Boolean @default(false)
   played_at           String?
   played_when         DateTime?
