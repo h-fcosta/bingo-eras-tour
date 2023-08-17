@@ -55,11 +55,13 @@ export default class AlbumController {
 
   static async fetchAlbumsFromDeezer(artistId: string) {
     try {
-      const response = await apiDeezer.get(`/artist/${artistId}/albums`);
+      const response = await apiDeezer.get(
+        `/artist/${artistId}/albums?index=25`
+      );
 
       return response.data;
     } catch (error: any) {
-      console.log("Error: erro");
+      console.log("Error:", error);
     }
   }
 
@@ -113,12 +115,15 @@ export default class AlbumController {
                 albumId: verifyAlbumDB.id
               }
             });
+
             console.log("Deezer info stored:", albumInfoDeezer);
           } catch (error: any) {
-            console.error(error);
+            console.error("Error:", error);
           }
         }
-      } catch (error: any) {}
+      } catch (error: any) {
+        console.error("Error", error);
+      }
     }
   }
 }

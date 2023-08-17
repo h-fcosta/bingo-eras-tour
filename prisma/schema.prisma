@@ -48,9 +48,9 @@ model Song{
 
 model Songs_Links{
   id                String @id @default(uuid())
-  spotify_album_id  String? @unique
+  spotify_song_id   String? @unique
   spotify_link      String?
-  deezer_album_id   String? @unique
+  deezer_song_id    String? @unique
   deezer_link       String?
   Song              Song? @relation(fields: [songId], references: [id])
   songId            String?
@@ -73,9 +73,9 @@ model Single{
 
 model Singles_Links{
   id                String @id @default(uuid())
-  spotify_album_id  String? @unique
+  spotify_single_id  String? @unique
   spotify_link      String?
-  deezer_album_id   String? @unique
+  deezer_single_id   String? @unique
   deezer_link       String?
   Single            Single? @relation(fields: [singleId], references: [id])
   singleId          String?
