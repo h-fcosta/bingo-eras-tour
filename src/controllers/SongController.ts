@@ -5,6 +5,7 @@ import prisma from "../db/dbConnect";
 import { cleanTitle } from "../utils/cleanTitle";
 
 export default class SongController {
+  //Get the album's ID from the URL
   static async fetchAndStoreAlbumTracks(req: Request, res: Response) {
     const albumId = req.params.albumId;
 
@@ -14,6 +15,7 @@ export default class SongController {
 
       return res.json(tracks.items);
     } catch (error) {
+      console.log("VAMO GREMIO");
       console.error("Error:", error);
       res.status(500).json({ error: "Internal server error" });
     }
@@ -34,6 +36,7 @@ export default class SongController {
     }
   }
 
+  //Fetch the album tracks in the API
   static async fetchAlbumTracksFromSpotify(albumId: string) {
     try {
       const accessToken = await redisClient.get("accessToken");
@@ -63,12 +66,14 @@ export default class SongController {
     }
   }
 
+  //Store the albums tracks and infos to the DB
+
   static async storeTracksInDatabase(tracks: any[], albumId: string) {
     if (!tracks || tracks.length === 0) {
       console.log("No songs to store");
       return;
     }
-    const albumExists = await prisma.albuns_Links.findUnique({
+    const albumExists = await prisma.albuns_Links.findFirst({
       where: { spotify_album_id: albumId }
     });
 
@@ -80,10 +85,14 @@ export default class SongController {
       try {
         const track = await prisma.song.create({
           data: {
-            spotify_song_id: trackInfo.id,
             song_name: trackInfo.name,
-            spotify_link: trackInfo.external_urls.spotify,
-            albumId: albumId
+            albumId: albumExists.albumId,
+            songs_links: {
+              create: {
+                spotify_song_id: trackInfo.id,
+                spotify_link: trackInfo.external_urls.spotify
+              }
+            }
           }
         });
 
@@ -107,7 +116,7 @@ export default class SongController {
       return;
     }
 
-    const albumExists = await prisma.albuns_Links.findUnique({
+    const albumExists = await prisma.albuns_Links.findFirst({
       where: { deezer_album_id: albumId }
     });
 
@@ -117,27 +126,25 @@ export default class SongController {
 
     for (const tracksInfo of tracks) {
       try {
-        const { id, title, link } = tracksInfo;
-
         //Erases "(Taylor's Version)" from the song name coming from the API
-        const cleanedTitle = cleanTitle(title, /\(Taylor's Version\)/g);
+        // const cleanedTitle = cleanTitle(title, /\(Taylor's Version\)/g);
 
         const verifyTrackDB = await prisma.song.findFirst({
-          where: { song_name: cleanedTitle }
+          where: { song_name: tracksInfo.title_short }
         });
 
         if (verifyTrackDB) {
-          const trackInfoDeezer = await prisma.songs_Links.create({
+          const trackInfoDeezer = await prisma.songs_Links.update({
+            where: { songId: verifyTrackDB.id },
             data: {
-              deezer_song_id: id.toString(),
-              deezer_link: link,
-              songId: verifyTrackDB.id
+              deezer_song_id: tracksInfo.id.toString(),
+              deezer_link: tracksInfo.link
             }
           });
 
           console.log("Deezer info stored:", trackInfoDeezer);
         } else {
-          console.log("Track not found:", cleanedTitle);
+          console.log("Track not found:", tracksInfo.title);
         }
       } catch (error: any) {
         if (
