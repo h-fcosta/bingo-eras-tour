@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getAccessToken(clientId, clientSecret) {
+export async function getAccessToken(clientId: any, clientSecret: any) {
   const authToken = Buffer.from(`${clientId}:${clientSecret}`).toString(
     "base64"
   );
@@ -21,7 +21,7 @@ export async function getAccessToken(clientId, clientSecret) {
     );
 
     return response.data.access_token;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error("Error retrieving access token:" + error.message);
   }
 }

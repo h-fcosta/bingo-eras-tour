@@ -1,19 +1,20 @@
 import express from "express";
-import AlbumController from "../controllers/AlbumController";
-import SongController from "../controllers/SongController";
-import SingleController from "../controllers/SingleController";
+import DeezerController from "../controllers/DeezerController";
 
 const router = express.Router();
 
 router
-  .get("/deezer/albums/:artistId", AlbumController.fetchAndStoreAlbumDeezer)
+  .get(
+    "/deezer/albums/:artistId",
+    DeezerController.fetchAndStoreAlbumInfoFromDeezer
+  )
   .get(
     "/deezer/songs/:albumId",
-    SongController.fetchAndStoreAlbumTracksInfoDeezer
+    DeezerController.fetchAndStoreAlbumTracksInfoDeezer
   )
   .get(
     "/deezer/singles/:artistId",
-    SingleController.fetchAndStoreSingleDeezerInfo
+    DeezerController.fetchAndStoreSingleDeezerInfo
   );
 
 export default router;
