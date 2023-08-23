@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import redisClient from "../db/redis";
 import { apiDeezer, apiSpotify } from "../api";
 import prisma from "../db/dbConnect";
-import { cleanTitle } from "../utils/cleanTitle";
 
 export default class SingleController {
   static async fetchAndStoreSingle(req: Request, res: Response) {
@@ -38,7 +37,7 @@ export default class SingleController {
       const accessToken = await redisClient.get("accessToken");
 
       const response = await apiSpotify.get(
-        `/artists/${artistId}/albums?market=BR&include_groups=single&limit=50`,
+        `/artists/${artistId}/albums?market=BR&include_groups=single&offset=25&limit=50`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -74,9 +73,13 @@ export default class SingleController {
       try {
         const single = await prisma.single.create({
           data: {
-            spotify_single_id: singleInfo.id,
             single_name: singleInfo.name,
-            spotify_link: singleInfo.external_urls.spotify
+            singles_links: {
+              create: {
+                spotify_single_id: singleInfo.id,
+                spotify_link: singleInfo.external_urls.spotify
+              }
+            }
           }
         });
 
@@ -106,23 +109,16 @@ export default class SingleController {
 
     for (const singleInfo of filteredSingles) {
       try {
-        const { id, title, link } = singleInfo;
-
-        //Erases "(Taylor's Version)" from the song name coming from the API
-        const cleanedTitle = cleanTitle(title, /\(Taylor’s Version\)/g);
-
         const verifySingleDb = await prisma.single.findFirst({
-          where: { single_name: cleanedTitle }
+          where: { single_name: singleInfo.title }
         });
 
-        // console.log(verifySingleDb?.single_name);
-
         if (verifySingleDb) {
-          const single = await prisma.singles_Links.create({
+          const single = await prisma.singles_Links.update({
+            where: { singleId: verifySingleDb.id },
             data: {
-              deezer_single_id: id.toString(),
-              deezer_link: link,
-              singleId: verifySingleDb?.id
+              deezer_single_id: singleInfo.id.toString(),
+              deezer_link: singleInfo.link
             }
           });
 

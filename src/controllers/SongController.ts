@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import redisClient from "../db/redis";
 import { apiDeezer, apiSpotify } from "../api";
 import prisma from "../db/dbConnect";
-import { cleanTitle } from "../utils/cleanTitle";
 
 export default class SongController {
   //Get the album's ID from the URL
@@ -126,9 +125,6 @@ export default class SongController {
 
     for (const tracksInfo of tracks) {
       try {
-        //Erases "(Taylor's Version)" from the song name coming from the API
-        // const cleanedTitle = cleanTitle(title, /\(Taylor's Version\)/g);
-
         const verifyTrackDB = await prisma.song.findFirst({
           where: { song_name: tracksInfo.title_short }
         });
@@ -163,6 +159,7 @@ export default class SongController {
     try {
       const songs = await prisma.song.findMany({
         include: {
+          songs_links: true,
           album: {
             select: {
               release_order: true,
@@ -179,6 +176,7 @@ export default class SongController {
 
       const singles = await prisma.single.findMany({
         include: {
+          singles_links: true,
           album: {
             select: {
               release_order: true,
