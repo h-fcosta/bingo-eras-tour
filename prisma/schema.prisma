@@ -16,19 +16,9 @@ model Album{
   release_date        String 
   release_order       String?
   album_color         String?
-  albuns_links        Albuns_Links?
+  links               Links?
   song                Song[]
   single              Single[]
-}
-
-model Albuns_Links{
-  id                String    @id @default(uuid())
-  spotify_album_id  String? 
-  spotify_link      String?
-  deezer_album_id   String? 
-  deezer_link       String?
-  albumId           String    @unique
-  album             Album?    @relation(fields: [albumId], references: [id])
 }
 
 model Song{
@@ -40,18 +30,8 @@ model Song{
   on_set_list        Boolean        @default(false)
   albumId            String
   album              Album          @relation(fields: [albumId], references: [id])
-  songs_links        Songs_Links?
+  links              Links?
   facts              Fact[]
-}
-
-model Songs_Links{
-  id                String    @id @default(uuid())
-  spotify_song_id   String?   @unique
-  spotify_link      String?
-  deezer_song_id    String?   @unique
-  deezer_link       String?
-  songId            String    @unique
-  song              Song?     @relation(fields: [songId], references: [id])
 }
 
 model Single{
@@ -63,18 +43,22 @@ model Single{
   on_set_list         Boolean         @default(false)
   albumId             String? 
   album               Album?          @relation(fields: [albumId], references: [id])
-  singles_links       Singles_Links? 
+  links               Links? 
   facts               Fact[]
 }
 
-model Singles_Links{
-  id                String    @id @default(uuid())
-  spotify_single_id String?   @unique
-  spotify_link      String?
-  deezer_single_id  String?   @unique
-  deezer_link       String?
-  singleId          String?   @unique
-  Single            Single?   @relation(fields: [singleId], references: [id])
+model Links{
+  id            String @id @default(uuid())
+  spotify_id    String?   @unique
+  spotify_link  String?
+  deezer_id     String?   @unique
+  deezer_link   String?
+  albumId       String?   @unique
+  songId        String?   @unique
+  singleId      String?   @unique
+  Album         Album?    @relation(fields: [albumId], references: [id])
+  Song          Song?     @relation(fields: [songId], references: [id])
+  Single        Single?   @relation(fields: [singleId], references: [id])
 }
 
 model Fact{

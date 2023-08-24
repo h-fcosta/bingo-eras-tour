@@ -6,7 +6,7 @@ export default class SongAndSinglesController {
     try {
       const songs = await prisma.song.findMany({
         include: {
-          songs_links: true,
+          links: true,
           album: {
             select: {
               release_order: true,
@@ -23,7 +23,7 @@ export default class SongAndSinglesController {
 
       const singles = await prisma.single.findMany({
         include: {
-          singles_links: true,
+          links: true,
           album: {
             select: {
               release_order: true,
@@ -40,8 +40,7 @@ export default class SongAndSinglesController {
 
       const songsAndSingles = [...songs, ...singles].sort(
         (a, b) =>
-          Number(a.album?.release_order || 0) -
-          Number(b.album?.release_order || 0)
+          Number(a.album?.release_order) - Number(b.album?.release_order)
       );
 
       return res.json(songsAndSingles);
