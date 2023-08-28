@@ -48,7 +48,7 @@ REDIS_URL
 4. Run the database migrations:
 
 ```bash
-npx prisma migrate dev
+npx prisma migrate deploy
 ```
 
 5. Start server:
@@ -64,24 +64,35 @@ npm start
 - Axios
 - Express
 - Prisma
-- MySQL
+- PostgreSQL
 
 ### Usage
 
-The backend uses the Spotify API to get a list of albums, singles and album tracks, and store in the database.
+The backend uses the Spotify and Deezer APIs to get a list of albums, singles and album tracks, and store in the database.
 
-Recommended to use a SQL database, the SongController creates relation between Album and Album Tracks. Redis used to store the access token while fetching the data from the Spotify API.
+Recommended to use a SQL database, since there are relations between tables like Album and Song, Song and Links. 
+
+Redis is used to store the access token while fetching the data from the Spotify API.
 
 ### Endpoints
 
 `GET /token`: Request to GET Authorization Token to access Spotify API.
 
-`GET /spotify/albums/:artistId`: Get a list of the artist's albums and singles, and insert in the data in the database.
+`GET /spotify/albums/:artistId`: Get a list of the artist's albums from Spotify, and insert in the data in the database.
 Limit: 30 albuns per artist
 
-`GET /spotify/songs/:albumId`: Get a list of the album tracks, and insert the data in the database.
+`GET /spotify/singles/:artistId`: Get a list of the artist's singles from Spotify,, and insert in the data in the database.
+Limit: 30 albuns per artist
 
-`GET /songs`: Get a list of all songs and singles in the database.
+`GET /spotify/songs/:albumId`: Get a list of the album tracks from Spotify, and insert the data in the database.
+
+`GET /deezer/albums/:artistId`: Get a list of the artist's albums from Deezer, and insert in the data in the database the ID and the link.
+
+`GET /deezer/singles/:artistId`: Get a list of the artist's singles from Deezer, and insert in the data in the database the ID and the link.
+
+`GET /deezer/songs/:albumId`: Get a list of the album tracks from Deezer, and insert the data in the database the ID and the link.
+
+`GET /songs`: Get a list of all songs and singles with the streaming services links and others informations from the database.
 
 ### Contact
 
