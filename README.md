@@ -17,7 +17,7 @@ This is the backend part of the The Eras Tour Surprise Song Bingo project, respo
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16.13 or higher)
 - npm or yarn
 - MySQL or your preferred database
 
