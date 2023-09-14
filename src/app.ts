@@ -7,14 +7,14 @@ import prisma from "./db/dbConnect";
 dotEnv.config();
 
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cors());
 routes(app);
 
-app.listen(port, () => {
-  console.log(`Server listening on port: ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on port: ${PORT}`);
 });
 
 prisma
