@@ -4,6 +4,9 @@
   "description": "",
   "main": "app.ts",
   "type": "module",
+  "engines": {
+    "node": "18.16.x"
+  },
   "scripts": {
     "build": "rimraf dist && tsup src",
     "dev": "nodemon -L",
