@@ -68,6 +68,8 @@ export default class SongAndSinglesController {
       );
 
       return res.json(albumsOrder);
-    } catch (error: any) {}
+    } catch (error: any) {
+      console.error("Error:", error);
+    }
   }
 }
