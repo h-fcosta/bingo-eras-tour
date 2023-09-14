@@ -50,4 +50,22 @@ export default class SongAndSinglesController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  static async getAlbums(req: Request, res: Response) {
+    try {
+      const albums = await prisma.album.findMany({
+        orderBy: {
+          release_order: "asc"
+        }
+      });
+
+      const albumsOrder = albums.sort(
+        (a, b) => Number(a.release_order) - Number(b.release_order)
+      );
+
+      return res.json(albumsOrder);
+    } catch (error: any) {
+      console.error("Error:", error);
+    }
+  }
 }
