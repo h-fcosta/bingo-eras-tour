@@ -44,15 +44,17 @@ export default class SpotifyController {
       return;
     }
 
+    console.log(albums);
+
     for (const albumInfo of albums) {
       try {
         const album = await prisma.album.create({
           data: {
             album_name: albumInfo.name,
             release_date: albumInfo.release_date,
-            albuns_links: {
+            links: {
               create: {
-                spotify_album_id: albumInfo.id,
+                spotify_id: albumInfo.id,
                 spotify_link: albumInfo.external_urls.spotify
               }
             }
@@ -117,8 +119,8 @@ export default class SpotifyController {
       console.log("No songs to store");
       return;
     }
-    const albumExists = await prisma.albuns_Links.findFirst({
-      where: { spotify_album_id: albumId }
+    const albumExists = await prisma.links.findFirst({
+      where: { spotify_id: albumId }
     });
 
     if (!albumExists) {
@@ -131,9 +133,9 @@ export default class SpotifyController {
           data: {
             song_name: trackInfo.name,
             albumId: albumExists.albumId,
-            songs_links: {
+            links: {
               create: {
-                spotify_song_id: trackInfo.id,
+                spotify_id: trackInfo.id,
                 spotify_link: trackInfo.external_urls.spotify
               }
             }

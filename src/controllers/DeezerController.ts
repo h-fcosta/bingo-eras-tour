@@ -37,11 +37,13 @@ export default class DeezerController {
           where: { album_name: albumInfo.title }
         });
 
+        console.log("ALBUM", existingAlbum);
+
         if (existingAlbum) {
-          const album = await prisma.albuns_Links.update({
+          const album = await prisma.links.update({
             where: { albumId: existingAlbum.id },
             data: {
-              deezer_album_id: albumInfo.id.toString(),
+              deezer_id: albumInfo.id.toString(),
               deezer_link: albumInfo.link
             }
           });
@@ -86,8 +88,8 @@ export default class DeezerController {
       return;
     }
 
-    const albumExists = await prisma.albuns_Links.findFirst({
-      where: { deezer_album_id: albumId }
+    const albumExists = await prisma.links.findFirst({
+      where: { deezer_id: albumId }
     });
 
     if (!albumExists) {
@@ -101,10 +103,10 @@ export default class DeezerController {
         });
 
         if (verifyTrackDB) {
-          const track = await prisma.songs_Links.update({
+          const track = await prisma.links.update({
             where: { songId: verifyTrackDB.id },
             data: {
-              deezer_song_id: tracksInfo.id.toString(),
+              deezer_id: tracksInfo.id.toString(),
               deezer_link: tracksInfo.link
             }
           });
@@ -170,10 +172,10 @@ export default class DeezerController {
         });
 
         if (verifySingleDb) {
-          const single = await prisma.singles_Links.update({
+          const single = await prisma.links.update({
             where: { singleId: verifySingleDb.id },
             data: {
-              deezer_single_id: singleInfo.id.toString(),
+              deezer_id: singleInfo.id.toString(),
               deezer_link: singleInfo.link
             }
           });
